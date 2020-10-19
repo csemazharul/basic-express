@@ -1,0 +1,110 @@
+<%-include('../../partial/header')%>
+    <div class="container">
+        <div class="my-4">
+            <h2>Post Create</h2>
+            <form method="POST" action="/post">
+                <div class="form-group">
+                    <label for=""> Title</label>
+                    <input type="text" name="title" class="form-control" placeholder="Title">
+                </div>
+                <div class="form-group">
+                    <label for="">Description</label>
+                    <textarea class="form-control" name="body" placeholder="Description"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+                </fieldset>
+            </form>
+        </div>
+        <div class="my-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Published</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    <% if(posts.length>0){ %>
+                        <% posts.forEach(post=>{ %>
+                            <tr>
+                                <th>
+                                    <%=post.title%>
+                                </th>
+                                <td>
+                                    <%=post.body%>
+                                </td>
+                                <td>
+                                    <%= post.published ? 'Public':'Private' %>
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm edt-btn" data-toggle="modal" data-target="#exampleModal" data-id="<%= post.id %>" data-title="<%= post.title %>" data-body="<%= post.body %>" onclick="setData(this)">
+                                      Edit
+                                    </button>
+                                    <a class="btn btn-danger btn-sm" href="/post/delete/<%=post._id%>">Delete</a>
+                                </td>
+                            </tr>
+                            <% }) %>
+                                <% }else{ %>
+                                    <h2>Post is not Published</h2>
+
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Post edit</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <form method="POST" action="/post/update">
+                            <div class="form-group">
+                                <label for=""> Title</label>
+                                <input type="text" id="title" name="title" class="form-control" placeholder="Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Description</label>
+                                <textarea id="body" class="form-control" name="body" placeholder="Description"></textarea>
+                            </div>
+                            <input type="hidden" id="id" name="id">
+                            <div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <input type="submit" class="btn btn-success" value="Save changes">
+                            </div>
+                            </fieldset>
+
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        const setData = (e) => {
+            let {
+                id,
+                title,
+                body
+            } = e.dataset
+            document.getElementById("id").value = id
+
+            document.getElementById("title").value = title
+
+            document.getElementById("body").value = body
+        }
+    </script>
+    <%-include( '../../partial/footer')%>
